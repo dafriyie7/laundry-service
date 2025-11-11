@@ -41,22 +41,23 @@ const Services = () => {
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
 					{services.map((service, index) => (
 						<div
-							key={index}
-							className="bg-white p-8 rounded-lg shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300"
+							key={service.title}
 							data-aos={animations[index % animations.length]}
 							data-aos-delay={index * 100}
 						>
-							<div className="flex justify-center mb-4">
-								<div className="bg-green-600 rounded-full p-5">
-									{service.icon}
+							<div className="bg-white p-8 rounded-lg shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 h-full flex flex-col">
+								<div className="flex justify-center mb-4">
+									<div className="bg-green-600 rounded-full p-5">
+										{service.icon}
+									</div>
 								</div>
+								<h3 className="text-3xl font-bold text-green-800 mb-3">
+									{service.title}
+								</h3>
+								<p className="text-lg text-gray-700">
+									{service.description}
+								</p>
 							</div>
-							<h3 className="text-3xl font-bold text-green-800 mb-3">
-								{service.title}
-							</h3>
-							<p className="text-lg text-gray-700">
-								{service.description}
-							</p>
 						</div>
 					))}
 				</div>

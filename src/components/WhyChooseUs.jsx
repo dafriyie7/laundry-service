@@ -39,19 +39,20 @@ const WhyChooseUs = () => {
 					{features.map((feature, index) => (
 						<div
 							key={index}
-							className="text-center p-6"
 							data-aos="fade-up"
 							data-aos-delay={index * 150}
 						>
-							<div className="flex justify-center mb-4">
-								{feature.icon}
+							<div className="text-center p-6 h-full">
+								<div className="flex justify-center mb-4">
+									{feature.icon}
+								</div>
+								<h3 className="text-2xl font-semibold text-gray-800 mb-2">
+									{feature.title}
+								</h3>
+								<p className="text-gray-600">
+									{feature.description}
+								</p>
 							</div>
-							<h3 className="text-2xl font-semibold text-gray-800 mb-2">
-								{feature.title}
-							</h3>
-							<p className="text-gray-600">
-								{feature.description}
-							</p>
 						</div>
 					))}
 				</div>

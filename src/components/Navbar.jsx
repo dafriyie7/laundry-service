@@ -6,9 +6,7 @@ const Navbar = () => {
 	const [isOpen, setIsOpen] = useState(false);
 
 	return (
-		<nav className="absolute top-0 left-0 right-0 z-50 py-4">
-			{" "}
-			{/* Positioned absolutely, transparent background */}
+		<nav className="fixed top-0 left-0 right-0 z-50 bg-black/10 backdrop-blur-sm py-4">
 			<div className="container mx-auto px-4">
 				<div className="flex justify-between items-center">
 					{" "}
@@ -21,7 +19,9 @@ const Navbar = () => {
 							<span className="bg-green-600 text-white px-2 rounded-md mr-2">
 								7GREEN
 							</span>
-							<span className="tracking-wider pr-2">LAUNDRY</span>
+							<span className="tracking-wider pr-2 [text-shadow:-1px_-1px_0_#000,1px_-1px_0_#000,-1px_1px_0_#000,1px_1px_0_#000]">
+								LAUNDRY
+							</span>
 						</NavLink>
 					</div>
 					{/* Desktop Menu */}

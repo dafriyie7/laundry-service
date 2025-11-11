@@ -31,22 +31,23 @@ const Testimonials = () => {
 					{testimonials.map((testimonial, index) => (
 						<div
 							key={index}
-							className="bg-white p-8 rounded-lg shadow-md text-center"
 							data-aos={animations[index % animations.length]}
 							data-aos-duration="800"
 							data-aos-delay={index * 100}
 						>
-							<img
-								src={testimonial.image}
-								alt={testimonial.author}
-								className="w-20 h-20 rounded-full mx-auto mb-4"
-							/>
-							<p className="text-gray-600 italic mb-4">
-								"{testimonial.quote}"
-							</p>
-							<p className="font-bold text-gray-800">
-								- {testimonial.author}
-							</p>
+							<div className="bg-white p-8 rounded-lg shadow-md text-center h-full flex flex-col justify-center">
+								<img
+									src={testimonial.image}
+									alt={testimonial.author}
+									className="w-20 h-20 rounded-full mx-auto mb-4"
+								/>
+								<p className="text-gray-600 italic mb-4">
+									"{testimonial.quote}"
+								</p>
+								<p className="font-bold text-gray-800">
+									- {testimonial.author}
+								</p>
+							</div>
 						</div>
 					))}
 				</div>
