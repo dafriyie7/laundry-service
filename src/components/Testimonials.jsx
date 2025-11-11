@@ -18,6 +18,8 @@ const testimonials = [
 	},
 ];
 
+const animations = ["fade-right", "fade-up", "fade-left"];
+
 const Testimonials = () => {
 	return (
 		<section className="py-20 bg-gray-100 mb-20">
@@ -30,7 +32,7 @@ const Testimonials = () => {
 						<div
 							key={index}
 							className="bg-white p-8 rounded-lg shadow-md text-center"
-							data-aos="bounce"
+							data-aos={animations[index % animations.length]}
 							data-aos-duration="800"
 							data-aos-delay={index * 100}
 						>

@@ -11,10 +11,7 @@ const Hero = () => {
 
 			{/* Content of the hero section */}
 			<div className="container mx-auto flex flex-col md:flex-row items-center justify-between px-4 relative z-10">
-				<div
-					className="md:w-1/2 text-center md:text-left mb-8 md:mb-0"
-					data-aos="fade-right"
-				>
+				<div className="md:w-1/2 text-center md:text-left mb-8 md:mb-0">
 					<h1
 						className="text-5xl font-bold text-white leading-tight"
 						data-aos="fade-right"

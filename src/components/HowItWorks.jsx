@@ -37,7 +37,7 @@ const HowItWorks = () => {
 				</p>
 				<div
 					className="grid grid-cols-1 md:grid-cols-3 gap-12"
-					data-aos="bounce"
+					data-aos="fade-up"
 				>
 					{steps.map((step, index) => (
 						<div key={index} className="flex flex-col items-center">

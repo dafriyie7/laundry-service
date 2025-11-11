@@ -29,6 +29,8 @@ const services = [
 	},
 ];
 
+const animations = ["flip-left", "flip-right"];
+
 const Services = () => {
 	return (
 		<section className="py-20 bg-gray-100">
@@ -41,7 +43,7 @@ const Services = () => {
 						<div
 							key={index}
 							className="bg-white p-8 rounded-lg shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300"
-							data-aos="bounce"
+							data-aos={animations[index % animations.length]}
 							data-aos-delay={index * 100}
 						>
 							<div className="flex justify-center mb-4">

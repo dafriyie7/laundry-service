@@ -40,7 +40,7 @@ const WhyChooseUs = () => {
 						<div
 							key={index}
 							className="text-center p-6"
-							data-aos="bounce"
+							data-aos="fade-up"
 							data-aos-delay={index * 150}
 						>
 							<div className="flex justify-center mb-4">
