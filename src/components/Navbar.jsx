@@ -16,9 +16,12 @@ const Navbar = () => {
 					<div className="shrink-0">
 						<NavLink
 							to="/"
-							className="text-2xl font-bold text-white hover:text-green-200" // Changed to white for blending
+							className="text-2xl font-bold text-white hover:text-gray-200 transition-colors duration-300 flex items-center border-2 border-white rounded-md"
 						>
-							7GREEN LAUNDRY
+							<span className="bg-green-600 text-white px-2 rounded-md mr-2">
+								7GREEN
+							</span>
+							<span className="tracking-wider pr-2">LAUNDRY</span>
 						</NavLink>
 					</div>
 					{/* Desktop Menu */}
@@ -58,7 +61,7 @@ const Navbar = () => {
 					<div className="md:hidden flex items-center">
 						<button
 							onClick={() => setIsOpen(!isOpen)}
-							className="inline-flex items-center justify-center p-2 rounded-md text-white hover:text-green-200 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-green-500" // Changed text to white, hover background for better contrast
+							className="inline-flex items-center justify-center p-2 rounded-md text-white hover:text-green-200 hover:bg-gray-700" // Changed text to white, hover background for better contrast
 						>
 							<span className="sr-only">Open main menu</span>
 							{isOpen ? (

@@ -2,7 +2,7 @@ import React from "react";
 
 const Cta = () => {
 	return (
-		<section className="bg-green-800 text-white py-20">
+		<section className="bg-green-600 text-white py-20">
 			<div className="container mx-auto px-4 text-center">
 				<h2 className="text-4xl font-bold mb-4">
 					Ready to Lighten Your Laundry Load?
