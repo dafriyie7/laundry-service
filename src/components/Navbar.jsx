@@ -39,6 +39,12 @@ const Navbar = () => {
 							Services
 						</NavLink>
 						<NavLink
+							to="/pricing"
+							className="text-white hover:text-green-200 transition duration-300"
+						>
+							Pricing
+						</NavLink>
+						<NavLink
 							to="/about"
 							className="text-white hover:text-green-200 transition duration-300" // Changed to white for blending
 						>
@@ -81,9 +87,8 @@ const Navbar = () => {
 			</div>
 			{/* Mobile Menu */}
 			<div
-				className={`${
-					isOpen ? "block" : "hidden"
-				} md:hidden bg-black bg-opacity-75`}
+				className={`${isOpen ? "block" : "hidden"
+					} md:hidden bg-black bg-opacity-75`}
 			>
 				{" "}
 				{/* Added dark, semi-transparent background for mobile menu */}
@@ -99,6 +104,12 @@ const Navbar = () => {
 						className="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-green-200 hover:bg-gray-700" // Changed text to white
 					>
 						Services
+					</NavLink>
+					<NavLink
+						to="/pricing"
+						className="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-green-200 hover:bg-gray-700"
+					>
+						Pricing
 					</NavLink>
 					<NavLink
 						to="/about"
