@@ -1,11 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PageHeader from "../components/PageHeader";
 import { pricingData } from "../data/pricingData";
 import { MagnifyingGlassIcon, BanknotesIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import AOS from "aos";
 
 const Pricing = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [activeCategory, setActiveCategory] = useState("all");
+
+    useEffect(() => {
+        AOS.refresh();
+    }, [activeCategory, searchTerm]);
 
     const categories = [
         { id: "all", name: "All Services" },
@@ -68,26 +73,26 @@ const Pricing = () => {
                 </div>
 
                 {/* Pricing Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                     {filteredData().map((item, idx) => (
                         <div
                             key={idx}
-                            className="bg-white p-8 rounded-[2rem] shadow-lg border border-brand-cream hover:shadow-2xl hover:border-brand-gold/30 hover:-translate-y-2 transition-all group"
+                            className="bg-white p-6 rounded-2xl shadow-sm border border-brand-cream hover:shadow-xl hover:border-brand-gold/30 hover:-translate-y-1 transition-all group"
                             data-aos="fade-up"
-                            data-aos-delay={(idx % 4) * 100}
+                            data-aos-delay={(idx % 4) * 50}
                         >
-                            <div className="flex justify-between items-start mb-6">
-                                <span className="px-3 py-1 bg-brand-green/10 text-brand-green text-[9px] font-black uppercase tracking-widest rounded-lg group-hover:bg-brand-green group-hover:text-white transition-colors">
+                            <div className="flex justify-between items-start mb-4">
+                                <span className="px-2 py-0.5 bg-brand-green/10 text-brand-green text-[8px] font-black uppercase tracking-widest rounded-md group-hover:bg-brand-green group-hover:text-white transition-colors">
                                     {item.cat}
                                 </span>
                                 {item.unit && (
-                                    <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">per {item.unit}</span>
+                                    <span className="text-[8px] font-black text-gray-400 uppercase tracking-widest">per {item.unit}</span>
                                 )}
                             </div>
-                            <h3 className="text-2xl font-serif font-bold text-brand-forest mb-4 leading-tight group-hover:text-brand-green transition-colors">{item.item}</h3>
-                            <div className="pt-4 border-t border-brand-cream">
-                                <span className="text-sm font-bold text-gray-400 uppercase tracking-widest mr-2">Rate:</span>
-                                <span className="text-2xl font-serif font-black text-brand-forest">GHS {item.price.toFixed(2)}</span>
+                            <h3 className="text-lg font-serif font-bold text-brand-forest mb-3 leading-tight group-hover:text-brand-green transition-colors">{item.item}</h3>
+                            <div className="pt-3 border-t border-brand-cream flex justify-between items-baseline">
+                                <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Rate</span>
+                                <span className="text-xl font-serif font-black text-brand-forest">GHS {item.price.toFixed(2)}</span>
                             </div>
                         </div>
                     ))}

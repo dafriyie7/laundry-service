@@ -15,6 +15,7 @@ import {
     MagnifyingGlassIcon
 } from "@heroicons/react/24/outline";
 import { SparklesIcon, SunIcon, ArrowPathRoundedSquareIcon } from "@heroicons/react/24/solid";
+import AOS from "aos";
 
 const SchedulePickup = () => {
     const [serviceType, setServiceType] = useState("pickup"); // 'pickup' or 'dropoff'
@@ -93,7 +94,7 @@ const SchedulePickup = () => {
             return;
         }
 
-        const WHATSAPP_NUMBER = "233547285141"; // Your Business Number
+        const WHATSAPP_NUMBER = "233559154796"; // Updated Business Number
 
         let message = `🌿 *New Order: 7Green Laundry*\n`;
         message += `----------------------------------\n`;
