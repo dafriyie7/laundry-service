@@ -1,136 +1,117 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { Bars3Icon, XMarkIcon, SparklesIcon } from "@heroicons/react/24/outline";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Navbar = () => {
 	const [isOpen, setIsOpen] = useState(false);
+	const [scrolled, setScrolled] = useState(false);
+
+	useEffect(() => {
+		const handleScroll = () => {
+			setScrolled(window.scrollY > 50);
+		};
+		window.addEventListener("scroll", handleScroll);
+		return () => window.removeEventListener("scroll", handleScroll);
+	}, []);
+
+	const navLinks = [
+		{ name: "Home", to: "/" },
+		{ name: "Services", to: "/services" },
+		{ name: "Pricing", to: "/pricing" },
+		{ name: "About Us", to: "/about" },
+		{ name: "Contact", to: "/contact" },
+	];
 
 	return (
-		<nav className="fixed top-0 left-0 right-0 z-50 bg-black/10 backdrop-blur-sm py-4">
-			<div className="container mx-auto px-4">
+		<nav
+			className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-brand-forest/90 backdrop-blur-md py-3 shadow-2xl" : "bg-transparent py-6"
+				}`}
+		>
+			<div className="container mx-auto px-6">
 				<div className="flex justify-between items-center">
-					{" "}
 					{/* Logo */}
-					<div className="shrink-0">
-						<NavLink
-							to="/"
-							className="text-2xl font-bold text-white hover:text-gray-200 transition-colors duration-300 flex items-center border-2 border-white rounded-md"
-						>
-							<span className="bg-green-600 text-white px-2 rounded-md mr-2">
+					<NavLink to="/" className="group flex items-center gap-3">
+						<div className="relative">
+							<div className="bg-brand-green p-2 rounded-xl shadow-lg transform group-hover:rotate-12 transition-transform duration-300">
+								<SparklesIcon className="h-6 w-6 text-white" />
+							</div>
+							<div className="absolute -inset-1 bg-brand-gold/20 rounded-xl blur opacity-0 group-hover:opacity-100 transition-opacity"></div>
+						</div>
+						<div className="flex flex-col">
+							<span className="text-xl font-serif font-black tracking-tighter text-white leading-none">
 								7GREEN
 							</span>
-							<span className="tracking-wider pr-2 [text-shadow:-1px_-1px_0_#000,1px_-1px_0_#000,-1px_1px_0_#000,1px_1px_0_#000]">
-								LAUNDRY
+							<span className="text-[10px] font-black tracking-[0.3em] text-brand-gold uppercase leading-none mt-1">
+								Laundry
 							</span>
-						</NavLink>
-					</div>
+						</div>
+					</NavLink>
+
 					{/* Desktop Menu */}
-					<div className="hidden md:flex items-center space-x-8">
-						<NavLink
-							to="/"
-							className="text-white hover:text-green-200 transition duration-300" // Changed to white for blending
-						>
-							Home
-						</NavLink>
-						<NavLink
-							to="/services"
-							className="text-white hover:text-green-200 transition duration-300" // Changed to white for blending
-						>
-							Services
-						</NavLink>
-						<NavLink
-							to="/pricing"
-							className="text-white hover:text-green-200 transition duration-300"
-						>
-							Pricing
-						</NavLink>
-						<NavLink
-							to="/about"
-							className="text-white hover:text-green-200 transition duration-300" // Changed to white for blending
-						>
-							About Us
-						</NavLink>
-						<NavLink
-							to="/contact"
-							className="text-white hover:text-green-200 transition duration-300" // Changed to white for blending
-						>
-							Contact
-						</NavLink>
+					<div className="hidden lg:flex items-center space-x-10">
+						{navLinks.map((link) => (
+							<NavLink
+								key={link.to}
+								to={link.to}
+								className={({ isActive }) =>
+									`text-sm font-bold uppercase tracking-widest transition-all duration-300 hover:text-brand-gold ${isActive ? "text-brand-gold" : "text-white/80"
+									}`
+								}
+							>
+								{link.name}
+							</NavLink>
+						))}
 						<NavLink
 							to="/schedule-pickup"
-							className="bg-green-600 text-white px-5 py-2 rounded-full hover:bg-green-700 transition duration-300 font-semibold"
+							className="bg-brand-gold text-brand-forest px-8 py-3 rounded-xl font-black text-sm uppercase tracking-widest shadow-lg hover:bg-white hover:scale-105 transition-all duration-300 active:scale-95"
 						>
-							Schedule a Pickup
+							Book Now
 						</NavLink>
 					</div>
+
 					{/* Mobile Menu Button */}
-					<div className="md:hidden flex items-center">
+					<div className="lg:hidden">
 						<button
 							onClick={() => setIsOpen(!isOpen)}
-							className="inline-flex items-center justify-center p-2 rounded-md text-white hover:text-green-200 hover:bg-gray-700" // Changed text to white, hover background for better contrast
+							className="p-2 text-white hover:text-brand-gold transition-colors"
 						>
-							<span className="sr-only">Open main menu</span>
-							{isOpen ? (
-								<XMarkIcon
-									className="block h-6 w-6"
-									aria-hidden="true"
-								/>
-							) : (
-								<Bars3Icon
-									className="block h-6 w-6"
-									aria-hidden="true"
-								/>
-							)}
+							{isOpen ? <XMarkIcon className="h-8 w-8" /> : <Bars3Icon className="h-8 w-8" />}
 						</button>
 					</div>
 				</div>
 			</div>
+
 			{/* Mobile Menu */}
-			<div
-				className={`${isOpen ? "block" : "hidden"
-					} md:hidden bg-black bg-opacity-75`}
-			>
-				{" "}
-				{/* Added dark, semi-transparent background for mobile menu */}
-				<div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-					<NavLink
-						to="/"
-						className="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-green-200 hover:bg-gray-700" // Changed text to white
+			<AnimatePresence>
+				{isOpen && (
+					<motion.div
+						initial={{ opacity: 0, y: -10 }}
+						animate={{ opacity: 1, y: 0 }}
+						exit={{ opacity: 0, y: -10 }}
+						transition={{ duration: 0.2 }}
+						className="lg:hidden absolute top-full left-0 right-0 bg-brand-forest border-t border-white/10 shadow-2xl p-6 space-y-4"
 					>
-						Home
-					</NavLink>
-					<NavLink
-						to="/services"
-						className="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-green-200 hover:bg-gray-700" // Changed text to white
-					>
-						Services
-					</NavLink>
-					<NavLink
-						to="/pricing"
-						className="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-green-200 hover:bg-gray-700"
-					>
-						Pricing
-					</NavLink>
-					<NavLink
-						to="/about"
-						className="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-green-200 hover:bg-gray-700" // Changed text to white
-					>
-						About Us
-					</NavLink>
-					<NavLink
-						to="/contact"
-						className="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-green-200 hover:bg-gray-700" // Changed text to white
-					>
-						Contact
-					</NavLink>
-					<NavLink
-						to="/schedule-pickup"
-						className="block mt-2 mx-3 text-center bg-green-600 text-white px-5 py-2 rounded-full hover:bg-green-700 transition duration-300 font-semibold"
-					>
-						Schedule a Pickup
-					</NavLink>
-				</div>
-			</div>
+						{navLinks.map((link) => (
+							<NavLink
+								key={link.to}
+								to={link.to}
+								onClick={() => setIsOpen(false)}
+								className="block text-lg font-serif text-white hover:text-brand-gold py-2"
+							>
+								{link.name}
+							</NavLink>
+						))}
+						<NavLink
+							to="/schedule-pickup"
+							onClick={() => setIsOpen(false)}
+							className="block bg-brand-gold text-brand-forest text-center py-4 rounded-xl font-black uppercase tracking-widest"
+						>
+							Schedule a Pickup
+						</NavLink>
+					</motion.div>
+				)}
+			</AnimatePresence>
 		</nav>
 	);
 };

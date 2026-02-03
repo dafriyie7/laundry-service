@@ -1,1 +1,89 @@
 @import "tailwindcss";
+
+@theme {
+  --color-brand-forest: #0a2f1f;
+  --color-brand-green: #15803d;
+  --color-brand-gold: #c5a059;
+  --color-brand-cream: #f9f6f0;
+
+  --font-serif: "Playfair Display", serif;
+  --font-sans: "Inter", sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-brand-cream text-brand-forest font-sans selection:bg-brand-gold selection:text-white;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-serif;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-brand-green text-white px-8 py-4 rounded-2xl font-bold uppercase tracking-widest shadow-xl transition-all hover:bg-brand-forest hover:scale-105 active:scale-95 cursor-pointer;
+  }
+
+  .glass-card {
+    @apply bg-white/80 backdrop-blur-xl border border-white/20 shadow-2xl rounded-3xl;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-br from-brand-forest via-brand-green to-brand-gold;
+  }
+
+  .nav-link {
+    @apply relative text-white hover:text-brand-gold transition-colors duration-300 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-brand-gold after:transition-all hover:after:w-full;
+  }
+
+  .form-input {
+    @apply w-full px-6 py-5 rounded-2xl bg-brand-cream/50 border-2 border-brand-forest/10 focus:border-brand-gold focus:ring-4 focus:ring-brand-gold/20 focus:bg-white outline-none transition-all font-bold text-brand-forest placeholder:text-gray-400/50;
+  }
+}
+
+/* Custom AOS Refinements */
+[data-aos] {
+  pointer-events: none;
+}
+
+[data-aos].aos-animate {
+  pointer-events: auto;
+}
+/* Custom Scrollbars */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(10, 47, 31, 0.1);
+  border-radius: 99px;
+}
+.custom-scrollbar:hover::-webkit-scrollbar-thumb {
+  background: rgba(10, 47, 31, 0.2);
+}
+
+.custom-scrollbar-white::-webkit-scrollbar {
+  width: 6px;
+}
+.custom-scrollbar-white::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar-white::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 99px;
+}
+.custom-scrollbar-white:hover::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+}

@@ -1,60 +1,69 @@
 import React from "react";
 import {
-	CheckBadgeIcon,
-	HomeModernIcon,
-	RectangleStackIcon,
 	SparklesIcon,
-	StarIcon,
 	SunIcon,
+	ArrowPathRoundedSquareIcon,
 } from "@heroicons/react/24/outline";
 
 const services = [
 	{
-		icon: <SunIcon className="h-10 w-10 text-white" />,
-		title: "Wash, Dry & Fold",
+		icon: <SunIcon className="h-8 w-8 text-brand-gold" />,
+		title: "Wash & Fold",
 		description:
-			"Your everyday laundry, expertly washed, dried, and neatly folded for you.",
+			"Expert cleaning and precise folding for your daily wardrobe, returned ready to wear.",
 	},
 	{
-		icon: <SparklesIcon className="h-10 w-10 text-white" />,
+		icon: <SparklesIcon className="h-8 w-8 text-brand-gold" />,
 		title: "Dry Cleaning",
 		description:
-			"Gentle, non-toxic dry cleaning for your delicate garments, using eco-friendly methods.",
+			"Premium care for delicate fabrics using eco-conscious solvents and artisanal techniques.",
 	},
 	{
-		icon: <RectangleStackIcon className="h-10 w-10 text-white" />,
-		title: "Ironing & Pressing",
+		icon: <ArrowPathRoundedSquareIcon className="h-8 w-8 text-brand-gold" />,
+		title: "Press & Ironing",
 		description:
-			"Crisp, professional pressing for your shirts, trousers, and linens for a wrinkle-free finish.",
+			"Flawless steaming and pressing for shirts, suits, and linens with extreme attention to detail.",
 	},
 ];
 
-const animations = ["flip-left", "flip-right"];
-
 const Services = () => {
 	return (
-		<section className="py-20 bg-gray-100">
-			<div className="container mx-auto px-4 text-center">
-				<h2 className="text-4xl font-bold text-gray-800 mb-12">
-					Our Services
-				</h2>
-				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+		<section className="py-32 bg-white relative">
+			<div className="container mx-auto px-6">
+				<div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
+					<div className="max-w-2xl">
+						<h2 className="text-sm font-black text-brand-green uppercase tracking-[0.3em] mb-4" data-aos="fade-right">
+							Our Expertise
+						</h2>
+						<h3 className="text-4xl md:text-6xl font-serif text-brand-forest leading-tight" data-aos="fade-right" data-aos-delay="100">
+							Comprehensive Care <br /> for Every Garment
+						</h3>
+					</div>
+					<div data-aos="fade-left">
+						<a href="/services" className="text-brand-green font-bold uppercase tracking-widest border-b-2 border-brand-green/20 hover:border-brand-green transition-all py-2">
+							Explore All Services &rarr;
+						</a>
+					</div>
+				</div>
+
+				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
 					{services.map((service, index) => (
 						<div
 							key={service.title}
-							data-aos={animations[index % animations.length]}
+							className="group h-full"
+							data-aos="fade-up"
 							data-aos-delay={index * 100}
 						>
-							<div className="bg-white p-8 rounded-lg shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 h-full flex flex-col">
-								<div className="flex justify-center mb-4">
-									<div className="bg-green-600 rounded-full p-5">
+							<div className="bg-brand-cream p-12 rounded-[2.5rem] h-full flex flex-col items-start hover:bg-brand-forest transition-colors duration-500 group">
+								<div className="bg-white p-5 rounded-2xl shadow-xl mb-8 group-hover:bg-brand-green group-hover:scale-110 transition-all duration-500">
+									<div className="group-hover:text-white transition-colors">
 										{service.icon}
 									</div>
 								</div>
-								<h3 className="text-3xl font-bold text-green-800 mb-3">
+								<h4 className="text-2xl font-serif font-bold text-brand-forest mb-4 group-hover:text-white transition-colors">
 									{service.title}
-								</h3>
-								<p className="text-lg text-gray-700">
+								</h4>
+								<p className="text-gray-500 text-lg leading-relaxed group-hover:text-gray-300 transition-colors">
 									{service.description}
 								</p>
 							</div>

@@ -1,11 +1,14 @@
 import React from "react";
+import PageHeader from "../components/PageHeader";
 import {
-	CheckCircleIcon,
+	CheckBadgeIcon,
 	SparklesIcon,
 	SunIcon,
 	CubeIcon,
+	ChevronRightIcon
 } from "@heroicons/react/24/outline";
-import HowItWorks from "../components/HowItWorks"; // Re-using this component
+import { StarIcon } from "@heroicons/react/24/solid";
+import HowItWorks from "../components/HowItWorks";
 
 // Import services images
 import washAndFoldImg from "../assets/service_images/wash_and_fold.png";
@@ -14,100 +17,113 @@ import beddingImg from "../assets/service_images/bedding.png";
 
 const servicesList = [
 	{
-		icon: <SunIcon className="h-12 w-12 text-green-600" />,
-		title: "Wash & Fold",
+		icon: <SunIcon className="h-10 w-10" />,
+		title: "Couture Wash & Fold",
 		image: washAndFoldImg,
 		description:
-			"Perfect for your everyday laundry. We wash, dry, and neatly fold everything from your t-shirts and jeans to your socks and underwear.",
+			"A meticulous cleaning process for your everyday luxury. We use enzyme-rich detergents that protect fibers while achieving deep sanitation.",
 		features: [
-			"Separation of whites and colors",
-			"High-quality detergents",
-			"Neatly folded and packaged",
+			"Ph-balanced fabric softeners",
+			"Micro-filtration water process",
+			"Boutique-style precision folding",
+			"Custom aroma options"
 		],
 	},
 	{
-		icon: <SparklesIcon className="h-12 w-12 text-green-600" />,
-		title: "Dry Cleaning",
+		icon: <SparklesIcon className="h-10 w-10" />,
+		title: "Artisanal Dry Cleaning",
 		image: dryCleaningImg,
 		description:
-			"Expert care for your delicate garments. We handle suits, dresses, blouses, and other fine fabrics with the utmost attention to detail.",
+			"Beyond cleaning—this is preservation. We handle high-fashion, delicate silks, and tailored suits with zero-impact, eco-friendly solvents.",
 		features: [
-			"Eco-friendly cleaning process",
-			"Stain and spot treatment",
-			"Pressed and hung for a crisp finish",
+			"Individual garment inspection",
+			"Hand-finishing and pressing",
+			"Silk and cashmere specialization",
+			"Breathable garment packaging"
 		],
 	},
 	{
-		icon: <CubeIcon className="h-12 w-12 text-green-600" />,
-		title: "Bedding & Linens",
+		icon: <CubeIcon className="h-10 w-10" />,
+		title: "Luxe Bedding Care",
 		image: beddingImg,
 		description:
-			"From comforters and duvets to sheets and pillowcases, we'll return your bedding fresh, clean, and ready for a good night's sleep.",
+			"Restore the comfort of your sanctuary. Our deep-cleansing process removes allergens while maintaining the loft of your finest linens.",
 		features: [
-			"Specialized machines for large items",
-			"Hypoallergenic options available",
-			"Crisp and clean results",
+			"Hypoallergenic sterilization",
+			"Down and feather rejuvenation",
+			"Crisp linen pressing",
+			"Hermetic storage packaging"
 		],
 	},
 ];
 
 const Services = () => {
 	return (
-		<div className="pt-20">
-			{/* Page Header */}
-			<div className="bg-green-600 text-white">
-				<div className="container mx-auto text-center py-16 px-4">
-					<h1 className="text-5xl font-bold italic">Our Services</h1>
-					<p className="text-xl mt-4 text-green-100 italic">
-						Professional care for your clothes, so you can focus on
-						what matters.
-					</p>
-				</div>
-			</div>
+		<div className="bg-brand-cream min-h-screen">
+			<PageHeader
+				title="Our Services"
+				subtitle="Meticulous care for your most valued garments, delivered with uncompromising quality."
+				icon={StarIcon}
+			/>
 
 			{/* Services List Section */}
-			<section className="py-20 bg-white">
-				<div className="container max-w-7xl mx-auto px-4">
+			<section className="py-20 lg:py-32 bg-white">
+				<div className="container max-w-7xl mx-auto px-6">
 					{servicesList.map((service, index) => (
 						<div
 							key={index}
-							className={`flex flex-col items-center gap-12 ${index % 2 === 0
-									? "md:flex-row"
-									: "md:flex-row-reverse"
-								} ${index < servicesList.length - 1 ? "mb-20 shadow-sm pb-20 border-b border-gray-100" : ""
+							className={`flex flex-col items-center gap-16 lg:gap-24 ${index % 2 === 0
+								? "lg:flex-row"
+								: "lg:flex-row-reverse"
+								} ${index < servicesList.length - 1 ? "mb-32 shadow-sm pb-32 border-b border-brand-cream" : ""
 								}`}
 							data-aos={index % 2 === 0 ? "fade-right" : "fade-left"}
 						>
-							<div className="md:w-1/2">
-								<div className="flex items-center mb-4">
-									{service.icon}
-									<h2 className="text-4xl font-bold text-gray-800 ml-4 italic">
+							<div className="lg:w-1/2">
+								<div className="flex items-center gap-4 mb-8">
+									<div className="bg-brand-gold p-4 rounded-2xl text-brand-forest">
+										{service.icon}
+									</div>
+									<h2 className="text-4xl md:text-5xl font-serif text-brand-forest font-bold">
 										{service.title}
 									</h2>
 								</div>
-								<p className="text-lg text-gray-600 mb-6 leading-relaxed">
+
+								<p className="text-xl text-gray-500 mb-10 leading-relaxed font-medium">
 									{service.description}
 								</p>
-								<ul className="space-y-3">
+
+								<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 									{service.features.map((feature, i) => (
-										<li
+										<div
 											key={i}
-											className="flex items-center"
+											className="flex items-center gap-3 bg-brand-cream/50 p-4 rounded-xl border border-brand-gold/10"
 										>
-											<CheckCircleIcon className="h-6 w-6 text-green-500 mr-3" />
-											<span className="text-gray-700 italic">
+											<CheckBadgeIcon className="h-6 w-6 text-brand-green flex-shrink-0" />
+											<span className="text-brand-forest font-bold text-sm uppercase tracking-wider">
 												{feature}
 											</span>
-										</li>
+										</div>
 									))}
-								</ul>
+								</div>
+
+								<div className="mt-12">
+									<a href="/schedule-pickup" className="btn-primary inline-flex items-center gap-3">
+										Book this Service
+										<ChevronRightIcon className="h-5 w-5" />
+									</a>
+								</div>
 							</div>
-							<div className="md:w-1/2">
-								<img
-									src={service.image}
-									alt={service.title}
-									className="rounded-2xl shadow-2xl w-full h-auto transform hover:scale-105 transition duration-500"
-								/>
+
+							<div className="lg:w-1/2 relative group">
+								<div className="absolute -inset-4 bg-brand-gold/10 rounded-[3rem] blur-xl group-hover:bg-brand-gold/20 transition-all"></div>
+								<div className="relative rounded-[3rem] overflow-hidden shadow-2xl border-8 border-brand-cream aspect-[4/3]">
+									<img
+										src={service.image}
+										alt={service.title}
+										className="w-full h-full object-cover transform scale-110 group-hover:scale-100 transition duration-1000"
+									/>
+								</div>
 							</div>
 						</div>
 					))}
@@ -115,7 +131,9 @@ const Services = () => {
 			</section>
 
 			{/* How It Works Section */}
-			<HowItWorks />
+			<div className="bg-brand-cream">
+				<HowItWorks />
+			</div>
 		</div>
 	);
 };

@@ -1,11 +1,32 @@
 import React, { useState, useMemo } from "react";
+import PageHeader from "../components/PageHeader";
 import { pricingData } from "../data/pricingData";
-import { PlusIcon, MinusIcon, TrashIcon } from "@heroicons/react/24/outline";
+import {
+    PlusIcon,
+    MinusIcon,
+    TrashIcon,
+    CalendarIcon,
+    TruckIcon,
+    ShoppingBagIcon,
+    MapPinIcon,
+    ClockIcon,
+    CheckBadgeIcon,
+    ChevronRightIcon,
+    MagnifyingGlassIcon
+} from "@heroicons/react/24/outline";
+import { SparklesIcon, SunIcon, ArrowPathRoundedSquareIcon } from "@heroicons/react/24/solid";
 
 const SchedulePickup = () => {
     const [serviceType, setServiceType] = useState("pickup"); // 'pickup' or 'dropoff'
     const [selectedCategory, setSelectedCategory] = useState("laundry");
-    const [basket, setBasket] = useState([]); // [{ item: 'Shirt', category: 'laundry', price: 7, quantity: 1, unit: '' }]
+    const [basket, setBasket] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
+
+    const categoryIcons = {
+        laundry: <SunIcon className="h-4 w-4" />,
+        dryCleaning: <SparklesIcon className="h-4 w-4" />,
+        pressOnly: <ArrowPathRoundedSquareIcon className="h-4 w-4" />
+    };
 
     const addItem = (itemObj) => {
         setBasket(prev => {
@@ -41,200 +62,301 @@ const SchedulePickup = () => {
         return basket.reduce((sum, i) => sum + (i.price * i.quantity), 0).toFixed(2);
     }, [basket]);
 
-    return (
-        <div className="pt-20 bg-gray-50 min-h-screen">
-            <div className="bg-green-600 text-white shadow-xl">
-                <div className="container mx-auto text-center py-16 px-4">
-                    <h1 className="text-5xl font-bold italic">Schedule Your Service</h1>
-                    <p className="text-xl mt-4 text-green-100 italic">
-                        Tell us what you need, and we'll handle the rest.
-                    </p>
-                </div>
-            </div>
+    const filteredItems = useMemo(() => {
+        return pricingData[selectedCategory].filter(item =>
+            item.item.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+    }, [selectedCategory, searchTerm]);
 
-            <div className="container mx-auto px-4 py-12">
-                <div className="flex flex-col lg:flex-row gap-8">
+    const getItemQuantity = (itemName) => {
+        const item = basket.find(i => i.item === itemName && i.category === selectedCategory);
+        return item ? item.quantity : 0;
+    };
+
+    return (
+        <div className="bg-brand-cream min-h-screen">
+            <PageHeader
+                title="Schedule Service"
+                subtitle="Book your premium garment care experience. Professional handling from doorstep to delivery."
+                icon={CalendarIcon}
+            />
+
+            <div className="container mx-auto px-6 py-20">
+                <div className="flex flex-col lg:flex-row gap-12 items-start">
                     {/* Left Column: Form and Selection */}
-                    <div className="lg:w-2/3 space-y-8">
+                    <div className="lg:w-2/3 space-y-12">
                         {/* Service Selection Toggle */}
-                        <div className="bg-white p-6 rounded-2xl shadow-md" data-aos="fade-up">
-                            <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-                                <span className="bg-green-100 text-green-600 w-8 h-8 rounded-full flex items-center justify-center mr-3 text-sm">1</span>
-                                Service Option
-                            </h2>
-                            <div className="flex p-1 bg-gray-100 rounded-xl max-w-sm">
+                        <div className="bg-white p-10 rounded-[2.5rem] shadow-2xl shadow-brand-forest/5 border border-brand-cream" data-aos="fade-up">
+                            <div className="flex items-center gap-4 mb-10">
+                                <div className="bg-brand-gold p-3 rounded-xl text-brand-forest font-black">01</div>
+                                <h2 className="text-2xl font-serif font-bold text-brand-forest">Choose Your Convenience</h2>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-2 bg-brand-cream/50 rounded-[2rem]">
                                 <button
                                     onClick={() => setServiceType("pickup")}
-                                    className={`flex-1 py-3 px-4 rounded-lg font-bold transition-all duration-300 ${serviceType === "pickup" ? "bg-white text-green-600 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
+                                    className={`flex items-center justify-center gap-4 py-6 px-4 rounded-[1.5rem] font-bold transition-all duration-500 uppercase tracking-widest text-xs ${serviceType === "pickup" ? "bg-brand-forest text-brand-gold shadow-2xl" : "text-brand-forest hover:bg-brand-gold/10"}`}
                                 >
-                                    🚚 Pickup & Delivery
+                                    <TruckIcon className="h-6 w-6" />
+                                    Concierge Pickup
                                 </button>
                                 <button
                                     onClick={() => setServiceType("dropoff")}
-                                    className={`flex-1 py-3 px-4 rounded-lg font-bold transition-all duration-300 ${serviceType === "dropoff" ? "bg-white text-green-600 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
+                                    className={`flex items-center justify-center gap-4 py-6 px-4 rounded-[1.5rem] font-bold transition-all duration-500 uppercase tracking-widest text-xs ${serviceType === "dropoff" ? "bg-brand-forest text-brand-gold shadow-2xl" : "text-brand-forest hover:bg-brand-gold/10"}`}
                                 >
-                                    🏬 Drop at Shop
+                                    <ShoppingBagIcon className="h-6 w-6" />
+                                    In-Store Drop
                                 </button>
                             </div>
                         </div>
 
                         {/* Itemized Selection */}
-                        <div className="bg-white p-6 rounded-2xl shadow-md" data-aos="fade-up">
-                            <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-                                <span className="bg-green-100 text-green-600 w-8 h-8 rounded-full flex items-center justify-center mr-3 text-sm">2</span>
-                                Item Selection (Optional Estimate)
-                            </h2>
-
-                            {/* Category Tabs */}
-                            <div className="flex space-x-4 mb-6 overflow-x-auto pb-2">
-                                {Object.keys(pricingData).map(cat => (
-                                    <button
-                                        key={cat}
-                                        onClick={() => setSelectedCategory(cat)}
-                                        className={`px-6 py-2 rounded-full font-bold whitespace-nowrap transition-all duration-300 ${selectedCategory === cat ? "bg-green-600 text-white" : "bg-green-50 text-green-600 hover:bg-green-100"}`}
-                                    >
-                                        {cat.charAt(0).toUpperCase() + cat.slice(1).replace(/([A-Z])/g, ' $1')}
-                                    </button>
-                                ))}
+                        <div className="bg-white p-10 rounded-[3rem] shadow-2xl shadow-brand-forest/5 border border-brand-cream" data-aos="fade-up">
+                            <div className="flex items-center gap-4 mb-10">
+                                <div className="bg-brand-gold p-3 rounded-xl text-brand-forest font-black">02</div>
+                                <h2 className="text-2xl font-serif font-bold text-brand-forest">Garment Inventory <span className="text-sm font-sans font-medium text-gray-400 block lg:inline lg:ml-2">(Optional for Estimate)</span></h2>
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
-                                {pricingData[selectedCategory].map((itemObj, idx) => (
-                                    <div key={idx} className="flex justify-between items-center p-4 border border-gray-100 rounded-xl hover:bg-green-50 transition-colors group">
-                                        <div>
-                                            <p className="font-semibold text-gray-800">{itemObj.item}</p>
-                                            <p className="text-sm text-green-600 font-bold">GHS {itemObj.price.toFixed(2)} {itemObj.unit ? `/ ${itemObj.unit}` : ""}</p>
-                                        </div>
+                            {/* Category Tabs & Search */}
+                            <div className="flex flex-col md:flex-row gap-6 mb-10">
+                                <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide flex-1">
+                                    {Object.keys(pricingData).map(cat => (
                                         <button
-                                            onClick={() => addItem(itemObj)}
-                                            className="bg-green-100 text-green-600 p-2 rounded-lg group-hover:bg-green-600 group-hover:text-white transition-all"
+                                            key={cat}
+                                            onClick={() => setSelectedCategory(cat)}
+                                            className={`px-6 py-3 rounded-2xl font-bold whitespace-nowrap transition-all duration-500 uppercase tracking-widest text-[10px] flex items-center gap-2 ${selectedCategory === cat ? "bg-brand-green text-white shadow-lg" : "bg-brand-cream text-brand-green hover:bg-brand-green/10"}`}
                                         >
-                                            <PlusIcon className="h-5 w-5" />
+                                            {categoryIcons[cat]}
+                                            {cat.charAt(0).toUpperCase() + cat.slice(1).replace(/([A-Z])/g, ' $1')}
                                         </button>
+                                    ))}
+                                </div>
+                                <div className="relative w-full md:w-64">
+                                    <MagnifyingGlassIcon className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                                    <input
+                                        type="text"
+                                        placeholder="Search items..."
+                                        value={searchTerm}
+                                        onChange={(e) => setSearchTerm(e.target.value)}
+                                        className="w-full pl-12 pr-4 py-3 rounded-2xl bg-brand-cream/50 border border-brand-cream focus:bg-white focus:ring-2 focus:ring-brand-gold outline-none transition-all text-sm font-bold text-brand-forest"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-h-[600px] overflow-y-auto pr-4 custom-scrollbar">
+                                {filteredItems.length === 0 ? (
+                                    <div className="col-span-full py-20 text-center opacity-40">
+                                        <p className="italic font-medium">No items found matching "{searchTerm}"</p>
                                     </div>
-                                ))}
+                                ) : (
+                                    filteredItems.map((itemObj, idx) => {
+                                        const qty = getItemQuantity(itemObj.item);
+                                        return (
+                                            <div
+                                                key={idx}
+                                                className={`flex justify-between items-center p-6 rounded-3xl border transition-all group ${qty > 0 ? "bg-white border-brand-green shadow-xl" : "bg-brand-cream/30 border-brand-cream hover:border-brand-gold/30 hover:bg-white"}`}
+                                            >
+                                                <div className="flex-1">
+                                                    <p className={`font-serif font-bold text-lg transition-colors ${qty > 0 ? "text-brand-green" : "text-brand-forest"}`}>{itemObj.item}</p>
+                                                    <p className="text-xs font-black text-brand-gold uppercase tracking-widest mt-1">GHS {itemObj.price.toFixed(2)} {itemObj.unit ? `/ ${itemObj.unit}` : ""}</p>
+                                                </div>
+
+                                                <div className="flex items-center gap-3 bg-brand-forest/5 rounded-2xl p-2">
+                                                    {qty > 0 ? (
+                                                        <>
+                                                            <button
+                                                                onClick={() => updateQuantity(itemObj.item, selectedCategory, -1)}
+                                                                className="w-8 h-8 rounded-xl bg-white text-brand-forest flex items-center justify-center hover:bg-red-500 hover:text-white transition-all shadow-sm"
+                                                            >
+                                                                <MinusIcon className="h-4 w-4" />
+                                                            </button>
+                                                            <span className="w-6 text-center font-black text-brand-forest">{qty}</span>
+                                                        </>
+                                                    ) : null}
+                                                    <button
+                                                        onClick={() => addItem(itemObj)}
+                                                        className={`w-8 h-8 rounded-xl flex items-center justify-center transition-all shadow-lg ${qty > 0 ? "bg-brand-green text-white" : "bg-brand-forest text-brand-gold hover:bg-brand-green hover:text-white"}`}
+                                                    >
+                                                        <PlusIcon className="h-5 w-5" />
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        );
+                                    })
+                                )}
                             </div>
                         </div>
 
                         {/* Contact Form */}
-                        <div className="bg-white p-6 rounded-2xl shadow-md" data-aos="fade-up">
-                            <h2 className="text-2xl font-bold text-gray-800 mb-8 flex items-center">
-                                <span className="bg-green-100 text-green-600 w-8 h-8 rounded-full flex items-center justify-center mr-3 text-sm">3</span>
-                                {serviceType === "pickup" ? "Address & Schedule" : "Contact Details"}
-                            </h2>
-                            <form className="space-y-6">
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div>
-                                        <label className="block text-gray-700 font-semibold mb-2">First Name</label>
-                                        <input type="text" className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-green-500 focus:outline-none transition-all" />
-                                    </div>
-                                    <div>
-                                        <label className="block text-gray-700 font-semibold mb-2">Last Name</label>
-                                        <input type="text" className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-green-500 focus:outline-none transition-all" />
-                                    </div>
+                        <div className="bg-white p-10 rounded-[3rem] shadow-2xl shadow-brand-forest/5 border border-brand-cream" data-aos="fade-up">
+                            <div className="flex items-center gap-4 mb-12">
+                                <div className="bg-brand-gold p-3 rounded-xl text-brand-forest font-black">03</div>
+                                <h2 className="text-2xl font-serif font-bold text-brand-forest">{serviceType === "pickup" ? "Schedule & Location" : "Guest Details"}</h2>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                                <div className="space-y-3">
+                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">First Name</label>
+                                    <input type="text" className="form-input" placeholder="e.g. Samuel" />
+                                </div>
+                                <div className="space-y-3">
+                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Last Name</label>
+                                    <input type="text" className="form-input" placeholder="e.g. Asante" />
                                 </div>
 
-                                <div>
-                                    <label className="block text-gray-700 font-semibold mb-2">Phone Number</label>
-                                    <input type="tel" className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-green-500 focus:outline-none transition-all" />
+                                <div className="col-span-1 md:col-span-2 space-y-3">
+                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Phone Number</label>
+                                    <input type="tel" className="form-input" placeholder="+233 ... ..." />
                                 </div>
 
                                 {serviceType === "pickup" && (
-                                    <div>
-                                        <label className="block text-gray-700 font-semibold mb-2">Pickup Address</label>
-                                        <textarea rows="3" className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-green-500 focus:outline-none transition-all" placeholder="Enter your full address in Ghana..."></textarea>
+                                    <div className="col-span-1 md:col-span-2 space-y-3">
+                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 flex items-center gap-2">
+                                            <MapPinIcon className="h-3 w-3" />
+                                            Collection Address
+                                        </label>
+                                        <textarea rows="3" className="form-input resize-none" placeholder="Provide details e.g. Community 10, House Num..."></textarea>
                                     </div>
                                 )}
 
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div>
-                                        <label className="block text-gray-700 font-semibold mb-2">Service Date</label>
-                                        <input type="date" className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-green-500 focus:outline-none transition-all" />
-                                    </div>
-                                    <div>
-                                        <label className="block text-gray-700 font-semibold mb-2">{serviceType === "pickup" ? "Pickup Time" : "Drop-off Time"}</label>
-                                        <select className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-green-500 focus:outline-none transition-all">
-                                            <option>Morning (8am - 12pm)</option>
-                                            <option>Afternoon (12pm - 4pm)</option>
-                                            <option>Evening (4pm - 8pm)</option>
-                                        </select>
-                                    </div>
+                                <div className="space-y-3">
+                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 flex items-center gap-2">
+                                        <CalendarIcon className="h-3 w-3" />
+                                        Service Date
+                                    </label>
+                                    <input type="date" className="form-input" />
+                                </div>
+                                <div className="space-y-3">
+                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 flex items-center gap-2">
+                                        <ClockIcon className="h-3 w-3" />
+                                        Window Preference
+                                    </label>
+                                    <select className="form-input appearance-none">
+                                        <option>Morning (08:00 - 12:00)</option>
+                                        <option>Afternoon (12:00 - 16:00)</option>
+                                        <option>Evening (16:00 - 20:00)</option>
+                                    </select>
                                 </div>
 
-                                <div>
-                                    <label className="block text-gray-700 font-semibold mb-2">Special Instructions</label>
-                                    <textarea rows="2" className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-green-500 focus:outline-none transition-all" placeholder="e.g. gate code, leave with security, starch level..."></textarea>
+                                <div className="col-span-1 md:col-span-2 space-y-3">
+                                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Special Handling Instructions</label>
+                                    <textarea rows="2" className="w-full px-6 py-5 rounded-2xl bg-brand-cream/50 border border-brand-cream focus:ring-2 focus:ring-brand-gold focus:bg-white outline-none transition-all font-bold text-brand-forest resize-none" placeholder="e.g. Delicate fabrics, stain alerts, starch level..."></textarea>
                                 </div>
-
-                                <button
-                                    type="button"
-                                    className="w-full bg-green-600 text-white py-4 rounded-xl font-bold text-lg hover:bg-green-700 transition duration-300 shadow-lg transform hover:-translate-y-1 block md:hidden"
-                                >
-                                    Schedule {serviceType === "pickup" ? "Pickup" : "Drop-off"}
-                                </button>
-                            </form>
+                            </div>
                         </div>
                     </div>
 
                     {/* Right Column: Basket Summary */}
-                    <div className="lg:w-1/3">
-                        <div className="bg-white p-6 rounded-2xl shadow-xl sticky top-24" data-aos="fade-left">
-                            <h3 className="text-2xl font-bold text-gray-800 mb-6 border-b pb-4">Order Summary</h3>
+                    <div className="lg:w-1/3 w-full">
+                        <div className="bg-brand-forest p-10 rounded-[3rem] shadow-2xl sticky top-24 border border-white/10" data-aos="fade-left">
+                            <div className="flex items-center gap-4 mb-10 pb-6 border-b border-white/10">
+                                <div className="bg-brand-gold p-3 rounded-xl text-brand-forest">
+                                    <SparklesIcon className="h-6 w-6" />
+                                </div>
+                                <h3 className="text-2xl font-serif font-bold text-white">Your Selection</h3>
+                            </div>
 
-                            <div className="max-h-[300px] overflow-y-auto mb-6 custom-scrollbar">
+                            <div className="max-h-[400px] overflow-y-auto mb-10 pr-2 custom-scrollbar-white">
                                 {basket.length === 0 ? (
-                                    <p className="text-gray-400 italic text-center py-8">Your basket is empty. Add items to see an estimate.</p>
+                                    <div className="text-center py-10 opacity-40">
+                                        <ShoppingBagIcon className="h-16 w-16 mx-auto mb-4 text-white" />
+                                        <p className="text-white italic font-medium">Your basket is awaiting your selection.</p>
+                                    </div>
                                 ) : (
-                                    <div className="space-y-4">
+                                    <div className="space-y-3">
                                         {basket.map((i, idx) => (
-                                            <div key={idx} className="flex justify-between items-start animate-fade-in shadow-sm rounded-lg p-2">
-                                                <div className="flex-1">
-                                                    <p className="font-semibold text-gray-800 leading-tight">{i.item}</p>
-                                                    <p className="text-xs text-gray-400 capitalize">{i.category.replace(/([A-Z])/g, ' $1')}</p>
-                                                </div>
-                                                <div className="flex flex-col items-end">
-                                                    <div className="flex items-center space-x-2 mb-1">
-                                                        <button onClick={() => updateQuantity(i.item, i.category, -1)} className="p-1 rounded bg-gray-100 hover:bg-red-100 text-gray-600 hover:text-red-500"><MinusIcon className="h-4 w-4" /></button>
-                                                        <span className="font-mono text-sm">{i.quantity}</span>
-                                                        <button onClick={() => updateQuantity(i.item, i.category, 1)} className="p-1 rounded bg-gray-100 hover:bg-green-100 text-gray-600 hover:text-green-500"><PlusIcon className="h-4 w-4" /></button>
+                                            <div key={idx} className="bg-white/5 p-4 rounded-2xl border border-white/10 hover:bg-white/20 transition-all group">
+                                                <div className="flex items-center gap-4">
+                                                    <div className="flex-1 min-w-0">
+                                                        <p className="font-serif font-bold text-white text-base leading-tight truncate">{i.item}</p>
+                                                        <p className="text-[9px] font-black text-brand-gold uppercase tracking-widest mt-0.5 opacity-60 truncate">{i.category.replace(/([A-Z])/g, ' $1')}</p>
                                                     </div>
-                                                    <p className="font-bold text-sm text-green-600">GHS {(i.price * i.quantity).toFixed(2)}</p>
+
+                                                    <div className="flex items-center gap-2 bg-white/5 rounded-xl p-1.5 px-2">
+                                                        <button
+                                                            onClick={() => updateQuantity(i.item, i.category, -1)}
+                                                            className="w-6 h-6 rounded-lg bg-white/10 text-white flex items-center justify-center hover:bg-brand-gold hover:text-brand-forest transition-all"
+                                                        >
+                                                            <MinusIcon className="h-3 w-3" />
+                                                        </button>
+                                                        <span className="text-white text-xs font-black font-mono w-4 text-center">{i.quantity}</span>
+                                                        <button
+                                                            onClick={() => updateQuantity(i.item, i.category, 1)}
+                                                            className="w-6 h-6 rounded-lg bg-white/10 text-white flex items-center justify-center hover:bg-brand-green hover:text-white transition-all"
+                                                        >
+                                                            <PlusIcon className="h-3 w-3" />
+                                                        </button>
+                                                    </div>
+
+                                                    <div className="text-right min-w-[70px]">
+                                                        <p className="font-serif font-black text-brand-gold text-sm whitespace-nowrap">GHS {(i.price * i.quantity).toFixed(2)}</p>
+                                                    </div>
+
+                                                    <button
+                                                        onClick={() => removeItem(i.item, i.category)}
+                                                        className="text-white/20 hover:text-red-400 transition-colors p-1"
+                                                    >
+                                                        <TrashIcon className="h-4 w-4" />
+                                                    </button>
                                                 </div>
-                                                <button onClick={() => removeItem(i.item, i.category)} className="ml-2 text-gray-300 hover:text-red-500"><TrashIcon className="h-4 w-4" /></button>
                                             </div>
                                         ))}
                                     </div>
                                 )}
                             </div>
 
-                            <div className="border-t pt-4 space-y-3">
-                                <div className="flex justify-between items-center text-gray-600">
-                                    <span>Subtotal</span>
-                                    <span className="font-bold">GHS {totalEstimate}</span>
+                            <div className="space-y-4 pt-4">
+                                <div className="flex justify-between items-center text-gray-400 text-[10px] font-black uppercase tracking-widest">
+                                    <span>Base Service</span>
+                                    <span className="text-white">GHS {totalEstimate}</span>
                                 </div>
-                                <div className="flex justify-between items-center text-gray-600">
-                                    <span>Service Fee ({serviceType})</span>
-                                    <span className="font-bold">{serviceType === "pickup" ? "GHS 10.00" : "GHS 0.00"}</span>
+                                <div className="flex justify-between items-center text-gray-400 text-[10px] font-black uppercase tracking-widest">
+                                    <span>Concierge Fee ({serviceType})</span>
+                                    <span className="text-white">{serviceType === "pickup" ? "GHS 10.00" : "GHS 0.00"}</span>
                                 </div>
-                                <div className="flex justify-between items-center text-gray-900 text-xl font-black pt-2">
-                                    <span>Total Estimate</span>
-                                    <span className="text-green-600">GHS {(parseFloat(totalEstimate) + (serviceType === "pickup" ? 10 : 0)).toFixed(2)}</span>
+                                <div className="flex justify-between items-center pt-6 border-t border-white/10 text-brand-gold">
+                                    <span className="text-sm font-black uppercase tracking-[0.2em]">Total Estimate</span>
+                                    <span className="text-3xl font-serif font-black">GHS {(parseFloat(totalEstimate) + (serviceType === "pickup" ? 10 : 0)).toFixed(2)}</span>
                                 </div>
                             </div>
 
                             <button
                                 type="button"
-                                className="w-full bg-green-600 text-white py-4 rounded-xl font-bold text-lg hover:bg-green-700 transition duration-300 shadow-lg transform hover:-translate-y-1 mt-8"
+                                className="w-full btn-primary bg-brand-gold text-brand-forest hover:bg-white mt-12 py-6 rounded-2xl group flex items-center justify-center gap-4"
                             >
-                                Proceed to Finalize Order
+                                Finalize Your Booking
+                                <ChevronRightIcon className="h-5 w-5 group-hover:translate-x-2 transition-transform" />
                             </button>
-                            <p className="text-xs text-center text-gray-400 mt-4 leading-relaxed">
-                                * This is an estimate based on your selection. Final pricing will be confirmed after physical inspection of garments.
-                            </p>
+
+                            <div className="flex items-start gap-4 mt-8 opacity-40">
+                                <CheckBadgeIcon className="h-4 w-4 text-white flex-shrink-0 mt-1" />
+                                <p className="text-[10px] text-white italic leading-relaxed">
+                                    Final pricing will be confirmed after physical garment inspection. 7Green Laundry adheres to international textile care standards.
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            {/* Mobile Sticky CTA */}
+            <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-brand-forest p-6 border-t border-white/10 z-40 backdrop-blur-lg">
+                <div className="flex justify-between items-center mb-4">
+                    <span className="text-white text-xs font-black uppercase tracking-widest opacity-60">Estimated Total</span>
+                    <span className="text-brand-gold text-2xl font-serif font-black">GHS {(parseFloat(totalEstimate) + (serviceType === "pickup" ? 10 : 0)).toFixed(2)}</span>
+                </div>
+                <button
+                    onClick={() => {
+                        const summaryElement = document.getElementById('finalize-booking');
+                        summaryElement?.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                    className="w-full btn-primary bg-brand-gold text-brand-forest py-5 rounded-2xl font-black uppercase tracking-[0.2em] flex items-center justify-center gap-3"
+                >
+                    Review & Book
+                    <ChevronRightIcon className="h-5 w-5" />
+                </button>
+            </div>
+            <div id="finalize-booking" className="h-1 lg:hidden"></div>
         </div>
     );
 };

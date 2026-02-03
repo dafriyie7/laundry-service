@@ -6,11 +6,13 @@ import Services from "./pages/Services"
 import Contact from "./pages/Contact"
 import SchedulePickup from "./pages/SchedulePickup"
 import Pricing from "./pages/Pricing"
+import ScrollToTop from "./components/ScrollToTop"
 
 function App() {
 
 	return (
 		<div>
+			<ScrollToTop />
 			<Routes>
 				<Route path="/" element={<Layout />}>
 					<Route index element={<Home />} />

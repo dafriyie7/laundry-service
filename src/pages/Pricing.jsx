@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import PageHeader from "../components/PageHeader";
 import { pricingData } from "../data/pricingData";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { MagnifyingGlassIcon, BanknotesIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 
 const Pricing = () => {
     const [searchTerm, setSearchTerm] = useState("");
@@ -31,81 +32,91 @@ const Pricing = () => {
     };
 
     return (
-        <div className="pt-20 bg-gray-50 min-h-screen">
-            <div className="bg-green-600 text-white shadow-xl">
-                <div className="container mx-auto text-center py-16 px-4">
-                    <h1 className="text-5xl font-black italic underline decoration-green-400 mb-4">Pricing List</h1>
-                    <p className="text-xl text-green-100 italic">
-                        Transparent pricing for all your garment care needs.
-                    </p>
-                </div>
-            </div>
+        <div className="bg-brand-cream min-h-screen">
+            <PageHeader
+                title="Transparent Pricing"
+                subtitle="Investment-grade care for your wardrobe. Simple, honest, and competitive rates."
+                icon={BanknotesIcon}
+            />
 
-            <div className="container mx-auto px-4 py-12">
+            <div className="container mx-auto px-6 py-20">
                 {/* Search and Filters */}
-                <div className="flex flex-col md:flex-row justify-between items-center gap-6 mb-12 bg-white p-8 rounded-3xl shadow-xl" data-aos="fade-up">
-                    <div className="flex flex-wrap gap-2">
+                <div className="flex flex-col lg:flex-row justify-between items-center gap-10 mb-20 bg-white p-10 rounded-[2.5rem] shadow-2xl shadow-brand-forest/5 border border-brand-cream" data-aos="fade-up">
+                    <div className="flex flex-wrap items-center gap-3">
+                        <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest mr-4">Filter by:</span>
                         {categories.map(cat => (
                             <button
                                 key={cat.id}
                                 onClick={() => setActiveCategory(cat.id)}
-                                className={`px-6 py-3 rounded-xl font-bold transition-all duration-300 uppercase tracking-wider text-sm ${activeCategory === cat.id ? "bg-green-600 text-white shadow-lg scale-105" : "bg-gray-100 text-gray-500 hover:bg-green-50 hover:text-green-600"}`}
+                                className={`px-8 py-3 rounded-2xl font-bold transition-all duration-500 uppercase tracking-widest text-[10px] ${activeCategory === cat.id ? "bg-brand-forest text-brand-gold shadow-xl rotate-1 scale-110" : "bg-brand-cream text-brand-forest hover:bg-brand-gold/20"}`}
                             >
                                 {cat.name}
                             </button>
                         ))}
                     </div>
 
-                    <div className="relative w-full md:w-80">
-                        <MagnifyingGlassIcon className="h-5 w-5 absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                    <div className="relative w-full lg:w-96">
+                        <MagnifyingGlassIcon className="h-5 w-5 absolute left-5 top-1/2 -translate-y-1/2 text-brand-green" />
                         <input
                             type="text"
-                            placeholder="Search items..."
+                            placeholder="Find a specific item..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full pl-12 pr-4 py-4 rounded-xl bg-gray-50 border border-gray-100 focus:ring-2 focus:ring-green-500 focus:bg-white transition-all outline-none font-semibold"
+                            className="w-full pl-14 pr-6 py-5 rounded-2xl bg-brand-cream/50 border border-brand-cream focus:ring-2 focus:ring-brand-gold focus:bg-white transition-all outline-none font-bold text-brand-forest"
                         />
                     </div>
                 </div>
 
                 {/* Pricing Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" data-aos="fade-up">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                     {filteredData().map((item, idx) => (
-                        <div key={idx} className="bg-white p-6 rounded-2xl shadow-md border border-gray-50 hover:shadow-xl hover:-translate-y-1 transition-all group">
-                            <div className="flex justify-between items-start mb-2">
-                                <span className="px-3 py-1 bg-green-50 text-green-600 text-[10px] font-black uppercase tracking-widest rounded-full group-hover:bg-green-600 group-hover:text-white transition-colors">
+                        <div
+                            key={idx}
+                            className="bg-white p-8 rounded-[2rem] shadow-lg border border-brand-cream hover:shadow-2xl hover:border-brand-gold/30 hover:-translate-y-2 transition-all group"
+                            data-aos="fade-up"
+                            data-aos-delay={(idx % 4) * 100}
+                        >
+                            <div className="flex justify-between items-start mb-6">
+                                <span className="px-3 py-1 bg-brand-green/10 text-brand-green text-[9px] font-black uppercase tracking-widest rounded-lg group-hover:bg-brand-green group-hover:text-white transition-colors">
                                     {item.cat}
                                 </span>
                                 {item.unit && (
-                                    <span className="text-xs font-bold text-gray-400">per {item.unit}</span>
+                                    <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">per {item.unit}</span>
                                 )}
                             </div>
-                            <h3 className="text-xl font-bold text-gray-800 mb-1">{item.item}</h3>
-                            <div className="flex items-baseline gap-1">
-                                <span className="text-2xl font-black text-green-600">GHS {item.price.toFixed(2)}</span>
+                            <h3 className="text-2xl font-serif font-bold text-brand-forest mb-4 leading-tight group-hover:text-brand-green transition-colors">{item.item}</h3>
+                            <div className="pt-4 border-t border-brand-cream">
+                                <span className="text-sm font-bold text-gray-400 uppercase tracking-widest mr-2">Rate:</span>
+                                <span className="text-2xl font-serif font-black text-brand-forest">GHS {item.price.toFixed(2)}</span>
                             </div>
                         </div>
                     ))}
                 </div>
 
                 {filteredData().length === 0 && (
-                    <div className="text-center py-20 bg-white rounded-3xl shadow-inner border-2 border-dashed border-gray-200">
-                        <p className="text-2xl font-bold text-gray-400 italic">No items found matching "{searchTerm}"</p>
+                    <div className="text-center py-32 bg-white rounded-[3rem] shadow-inner border-4 border-dashed border-brand-cream">
+                        <div className="bg-brand-cream w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-8">
+                            <MagnifyingGlassIcon className="h-10 w-10 text-brand-green/30" />
+                        </div>
+                        <p className="text-3xl font-serif font-bold text-gray-300">No items found matching "{searchTerm}"</p>
                     </div>
                 )}
 
-                <div className="mt-16 bg-gradient-to-br from-green-600 to-green-700 rounded-3xl p-12 text-center text-white shadow-2xl overflow-hidden relative" data-aos="zoom-in">
-                    <div className="relative z-10">
-                        <h2 className="text-4xl font-black italic mb-6">Ready to book?</h2>
-                        <p className="text-xl mb-8 text-green-100 max-w-2xl mx-auto">
-                            Get your laundry picked up today and enjoy 5-star garment care.
+                <div className="mt-32 bg-brand-forest rounded-[3rem] p-16 lg:p-24 text-center relative overflow-hidden shadow-2xl" data-aos="zoom-in">
+                    {/* Decorative Bg */}
+                    <div className="absolute top-0 right-0 w-96 h-96 bg-brand-green/10 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2"></div>
+                    <div className="absolute bottom-0 left-0 w-64 h-64 bg-brand-gold/5 rounded-full blur-2xl -translate-x-1/2 translate-y-1/2"></div>
+
+                    <div className="relative z-10 max-w-3xl mx-auto">
+                        <h2 className="text-4xl md:text-6xl font-serif text-white mb-8 leading-tight">Ready to <span className="text-brand-gold italic">Experience</span> the Difference?</h2>
+                        <p className="text-xl text-gray-400 mb-12 leading-relaxed">
+                            Our pricing matches our quality. Professional garment restoration is just a book away.
                         </p>
-                        <button className="bg-white text-green-600 px-10 py-5 rounded-2xl font-black text-xl hover:bg-green-50 transition-all shadow-xl transform hover:scale-110 active:scale-95 uppercase tracking-widest">
-                            Schedule a Pickup
-                        </button>
+                        <a href="/schedule-pickup" className="btn-primary inline-flex items-center gap-4 bg-brand-gold text-brand-forest hover:bg-white">
+                            Book Your Pickup Now
+                            <ChevronRightIcon className="h-5 w-5" />
+                        </a>
                     </div>
-                    <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
-                    <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-64 h-64 bg-green-400/20 rounded-full blur-3xl"></div>
                 </div>
             </div>
         </div>
