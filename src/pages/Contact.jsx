@@ -33,7 +33,7 @@ const Contact = () => {
 
                             <div className="space-y-8 relative z-10">
                                 <a
-                                    href="tel:+233559154796"
+                                    href="tel:+233556398044"
                                     className="flex items-center gap-6 group/item"
                                 >
                                     <div className="bg-brand-green/10 p-5 rounded-2xl text-brand-green group-hover/item:bg-brand-green group-hover/item:text-white transition-all">
@@ -41,7 +41,7 @@ const Contact = () => {
                                     </div>
                                     <div>
                                         <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Phone</p>
-                                        <p className="text-lg font-bold text-brand-forest">+233 55 915 4796</p>
+                                        <p className="text-lg font-bold text-brand-forest">+233 55 639 8044</p>
                                     </div>
                                 </a>
 
@@ -59,7 +59,7 @@ const Contact = () => {
                                 </a>
 
                                 <a
-                                    href="https://wa.me/233559154796"
+                                    href="https://wa.me/233556398044"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="flex items-center gap-6 p-6 bg-[#25D366]/5 rounded-[2rem] border border-[#25D366]/20 transition-all hover:bg-[#25D366]/10 group/wa"
@@ -80,7 +80,7 @@ const Contact = () => {
                                         </div>
                                         <div>
                                             <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Location</p>
-                                            <p className="text-lg font-bold text-brand-forest">Accra, Ghana</p>
+                                            <p className="text-lg font-bold text-brand-forest">Kumasi, Ghana</p>
                                             <p className="text-sm text-gray-500 italic">Premium Mobile Service Only</p>
                                         </div>
                                     </div>

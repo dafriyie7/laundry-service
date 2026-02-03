@@ -1,4 +1,3 @@
-import React from "react";
 import { EnvelopeIcon, PhoneIcon } from "@heroicons/react/24/outline";
 
 const WhatsAppIcon = () => (
@@ -29,15 +28,15 @@ const ContactInfo = () => {
 						{
 							icon: <PhoneIcon className="h-6 w-6" />,
 							label: "Phone",
-							value: "+233 55 915 4796",
-							link: "tel:+233559154796",
+							value: "+233 55 639 8044",
+							link: "tel:+233556398044",
 							color: "brand-green"
 						},
 						{
 							icon: <WhatsAppIcon />,
 							label: "WhatsApp",
 							value: "Direct Consultation",
-							link: "https://wa.me/233559154796",
+							link: "https://wa.me/233556398044",
 							color: "[#25D366]"
 						},
 						{
