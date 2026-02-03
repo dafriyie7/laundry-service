@@ -21,6 +21,19 @@ const SchedulePickup = () => {
     const [selectedCategory, setSelectedCategory] = useState("laundry");
     const [basket, setBasket] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
+    const [formData, setFormData] = useState({
+        firstName: "",
+        lastName: "",
+        phone: "",
+        address: "",
+        date: "",
+        window: "Morning (08:00 - 12:00)"
+    });
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
 
     const categoryIcons = {
         laundry: <SunIcon className="h-4 w-4" />,
@@ -73,6 +86,49 @@ const SchedulePickup = () => {
         return item ? item.quantity : 0;
     };
 
+    const handleFinalizeBooking = () => {
+        // Basic validation
+        if (!formData.firstName || !formData.phone) {
+            alert("Please provide your name and phone number to continue.");
+            return;
+        }
+
+        const WHATSAPP_NUMBER = "233547285141"; // Your Business Number
+
+        let message = `🌿 *New Order: 7Green Laundry*\n`;
+        message += `----------------------------------\n`;
+        message += `👤 *Customer:* ${formData.firstName} ${formData.lastName}\n`;
+        message += `📞 *Phone:* ${formData.phone}\n`;
+
+        if (serviceType === "pickup") {
+            message += `📍 *Address:* ${formData.address}\n`;
+        } else {
+            message += `📍 *Type:* Drop-off at Station\n`;
+        }
+
+        message += `📅 *Service Date:* ${formData.date}\n`;
+        message += `⏰ *Window:* ${formData.window}\n\n`;
+
+        message += `🧺 *Selections:*\n`;
+
+        if (basket.length === 0) {
+            message += `• _No items selected (Estimate requested)_\n`;
+        } else {
+            basket.forEach(item => {
+                const categoryClean = item.category.replace(/([A-Z])/g, ' $1');
+                message += `• ${item.quantity}x ${item.item} (${categoryClean}) - GHS ${(item.price * item.quantity).toFixed(2)}\n`;
+            });
+        }
+
+        const finalTotal = (parseFloat(totalEstimate) + (serviceType === "pickup" ? 10 : 0)).toFixed(2);
+        message += `\n💰 *Total Estimate:* GHS ${finalTotal}\n`;
+        message += `🚚 *Service Type:* ${serviceType.charAt(0).toUpperCase() + serviceType.slice(1)}\n`;
+        message += `----------------------------------`;
+
+        const encodedMessage = encodeURIComponent(message);
+        window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`, "_blank");
+    };
+
     return (
         <div className="bg-brand-cream min-h-screen">
             <PageHeader
@@ -82,7 +138,7 @@ const SchedulePickup = () => {
             />
 
             <div className="container mx-auto px-6 py-20">
-                <div className="flex flex-col lg:flex-row gap-12 items-start">
+                <div className="flex flex-col lg:flex-row gap-12">
                     {/* Left Column: Form and Selection */}
                     <div className="lg:w-2/3 space-y-12">
                         {/* Service Selection Toggle */}
@@ -197,16 +253,37 @@ const SchedulePickup = () => {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                                 <div className="space-y-3">
                                     <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">First Name</label>
-                                    <input type="text" className="form-input" placeholder="e.g. Samuel" />
+                                    <input
+                                        type="text"
+                                        name="firstName"
+                                        value={formData.firstName}
+                                        onChange={handleInputChange}
+                                        className="form-input"
+                                        placeholder="e.g. Samuel"
+                                    />
                                 </div>
                                 <div className="space-y-3">
                                     <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Last Name</label>
-                                    <input type="text" className="form-input" placeholder="e.g. Asante" />
+                                    <input
+                                        type="text"
+                                        name="lastName"
+                                        value={formData.lastName}
+                                        onChange={handleInputChange}
+                                        className="form-input"
+                                        placeholder="e.g. Asante"
+                                    />
                                 </div>
 
                                 <div className="col-span-1 md:col-span-2 space-y-3">
                                     <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Phone Number</label>
-                                    <input type="tel" className="form-input" placeholder="+233 ... ..." />
+                                    <input
+                                        type="tel"
+                                        name="phone"
+                                        value={formData.phone}
+                                        onChange={handleInputChange}
+                                        className="form-input"
+                                        placeholder="+233 ... ... ..."
+                                    />
                                 </div>
 
                                 {serviceType === "pickup" && (
@@ -215,7 +292,14 @@ const SchedulePickup = () => {
                                             <MapPinIcon className="h-3 w-3" />
                                             Collection Address
                                         </label>
-                                        <textarea rows="3" className="form-input resize-none" placeholder="Provide details e.g. Community 10, House Num..."></textarea>
+                                        <textarea
+                                            rows="3"
+                                            name="address"
+                                            value={formData.address}
+                                            onChange={handleInputChange}
+                                            className="form-input resize-none"
+                                            placeholder="Provide details e.g. Community 10, House Num..."
+                                        ></textarea>
                                     </div>
                                 )}
 
@@ -224,14 +308,25 @@ const SchedulePickup = () => {
                                         <CalendarIcon className="h-3 w-3" />
                                         Service Date
                                     </label>
-                                    <input type="date" className="form-input" />
+                                    <input
+                                        type="date"
+                                        name="date"
+                                        value={formData.date}
+                                        onChange={handleInputChange}
+                                        className="form-input"
+                                    />
                                 </div>
                                 <div className="space-y-3">
                                     <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 flex items-center gap-2">
                                         <ClockIcon className="h-3 w-3" />
                                         Window Preference
                                     </label>
-                                    <select className="form-input appearance-none">
+                                    <select
+                                        name="window"
+                                        value={formData.window}
+                                        onChange={handleInputChange}
+                                        className="form-input appearance-none"
+                                    >
                                         <option>Morning (08:00 - 12:00)</option>
                                         <option>Afternoon (12:00 - 16:00)</option>
                                         <option>Evening (16:00 - 20:00)</option>
@@ -248,15 +343,19 @@ const SchedulePickup = () => {
 
                     {/* Right Column: Basket Summary */}
                     <div className="lg:w-1/3 w-full">
-                        <div className="bg-brand-forest p-10 rounded-[3rem] shadow-2xl sticky top-24 border border-white/10" data-aos="fade-left">
-                            <div className="flex items-center gap-4 mb-10 pb-6 border-b border-white/10">
-                                <div className="bg-brand-gold p-3 rounded-xl text-brand-forest">
-                                    <SparklesIcon className="h-6 w-6" />
+                        <div className="bg-brand-forest rounded-[3rem] shadow-2xl sticky top-24 border border-white/10 flex flex-col max-h-[calc(100vh-140px)]">
+                            {/* Header */}
+                            <div className="p-8 pb-6 border-b border-white/10">
+                                <div className="flex items-center gap-4">
+                                    <div className="bg-brand-gold p-3 rounded-xl text-brand-forest">
+                                        <SparklesIcon className="h-6 w-6" />
+                                    </div>
+                                    <h3 className="text-2xl font-serif font-bold text-white">Your Selection</h3>
                                 </div>
-                                <h3 className="text-2xl font-serif font-bold text-white">Your Selection</h3>
                             </div>
 
-                            <div className="max-h-[400px] overflow-y-auto mb-10 pr-2 custom-scrollbar-white">
+                            {/* Scrollable Items Area */}
+                            <div className="flex-1 overflow-y-auto p-8 py-6 custom-scrollbar-white">
                                 {basket.length === 0 ? (
                                     <div className="text-center py-10 opacity-40">
                                         <ShoppingBagIcon className="h-16 w-16 mx-auto mb-4 text-white" />
@@ -274,14 +373,14 @@ const SchedulePickup = () => {
 
                                                     <div className="flex items-center gap-2 bg-white/5 rounded-xl p-1.5 px-2">
                                                         <button
-                                                            onClick={() => updateQuantity(i.item, i.category, -1)}
+                                                            onClick={(e) => { e.stopPropagation(); updateQuantity(i.item, i.category, -1); }}
                                                             className="w-6 h-6 rounded-lg bg-white/10 text-white flex items-center justify-center hover:bg-brand-gold hover:text-brand-forest transition-all"
                                                         >
                                                             <MinusIcon className="h-3 w-3" />
                                                         </button>
                                                         <span className="text-white text-xs font-black font-mono w-4 text-center">{i.quantity}</span>
                                                         <button
-                                                            onClick={() => updateQuantity(i.item, i.category, 1)}
+                                                            onClick={(e) => { e.stopPropagation(); updateQuantity(i.item, i.category, 1); }}
                                                             className="w-6 h-6 rounded-lg bg-white/10 text-white flex items-center justify-center hover:bg-brand-green hover:text-white transition-all"
                                                         >
                                                             <PlusIcon className="h-3 w-3" />
@@ -305,34 +404,38 @@ const SchedulePickup = () => {
                                 )}
                             </div>
 
-                            <div className="space-y-4 pt-4">
-                                <div className="flex justify-between items-center text-gray-400 text-[10px] font-black uppercase tracking-widest">
-                                    <span>Base Service</span>
-                                    <span className="text-white">GHS {totalEstimate}</span>
+                            {/* Sticky/Fixed Footer Area */}
+                            <div className="p-8 pt-6 border-t border-white/10 bg-brand-forest/50 backdrop-blur-md rounded-b-[3rem]">
+                                <div className="space-y-4">
+                                    <div className="flex justify-between items-center text-gray-400 text-[10px] font-black uppercase tracking-widest">
+                                        <span>Base Service</span>
+                                        <span className="text-white">GHS {totalEstimate}</span>
+                                    </div>
+                                    <div className="flex justify-between items-center text-gray-400 text-[10px] font-black uppercase tracking-widest">
+                                        <span>Concierge Fee ({serviceType})</span>
+                                        <span className="text-white">{serviceType === "pickup" ? "GHS 10.00" : "GHS 0.00"}</span>
+                                    </div>
+                                    <div className="flex justify-between items-center pt-6 border-t border-white/10 text-brand-gold">
+                                        <span className="text-sm font-black uppercase tracking-[0.2em]">Total Estimate</span>
+                                        <span className="text-3xl font-serif font-black">GHS {(parseFloat(totalEstimate) + (serviceType === "pickup" ? 10 : 0)).toFixed(2)}</span>
+                                    </div>
                                 </div>
-                                <div className="flex justify-between items-center text-gray-400 text-[10px] font-black uppercase tracking-widest">
-                                    <span>Concierge Fee ({serviceType})</span>
-                                    <span className="text-white">{serviceType === "pickup" ? "GHS 10.00" : "GHS 0.00"}</span>
-                                </div>
-                                <div className="flex justify-between items-center pt-6 border-t border-white/10 text-brand-gold">
-                                    <span className="text-sm font-black uppercase tracking-[0.2em]">Total Estimate</span>
-                                    <span className="text-3xl font-serif font-black">GHS {(parseFloat(totalEstimate) + (serviceType === "pickup" ? 10 : 0)).toFixed(2)}</span>
-                                </div>
-                            </div>
 
-                            <button
-                                type="button"
-                                className="w-full btn-primary bg-brand-gold text-brand-forest hover:bg-white mt-12 py-6 rounded-2xl group flex items-center justify-center gap-4"
-                            >
-                                Finalize Your Booking
-                                <ChevronRightIcon className="h-5 w-5 group-hover:translate-x-2 transition-transform" />
-                            </button>
+                                <button
+                                    type="button"
+                                    onClick={handleFinalizeBooking}
+                                    className="w-full btn-primary bg-brand-gold text-brand-forest hover:bg-white mt-8 py-6 rounded-2xl group flex items-center justify-center gap-4"
+                                >
+                                    Finalize Your Booking
+                                    <ChevronRightIcon className="h-5 w-5 group-hover:translate-x-2 transition-transform" />
+                                </button>
 
-                            <div className="flex items-start gap-4 mt-8 opacity-40">
-                                <CheckBadgeIcon className="h-4 w-4 text-white flex-shrink-0 mt-1" />
-                                <p className="text-[10px] text-white italic leading-relaxed">
-                                    Final pricing will be confirmed after physical garment inspection. 7Green Laundry adheres to international textile care standards.
-                                </p>
+                                <div className="flex items-start gap-4 mt-6 opacity-40">
+                                    <CheckBadgeIcon className="h-4 w-4 text-white flex-shrink-0 mt-1" />
+                                    <p className="text-[9px] text-white italic leading-relaxed">
+                                        Final pricing will be confirmed after physical garment inspection. 7Green Laundry adheres to international textile care standards.
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -346,13 +449,10 @@ const SchedulePickup = () => {
                     <span className="text-brand-gold text-2xl font-serif font-black">GHS {(parseFloat(totalEstimate) + (serviceType === "pickup" ? 10 : 0)).toFixed(2)}</span>
                 </div>
                 <button
-                    onClick={() => {
-                        const summaryElement = document.getElementById('finalize-booking');
-                        summaryElement?.scrollIntoView({ behavior: 'smooth' });
-                    }}
+                    onClick={handleFinalizeBooking}
                     className="w-full btn-primary bg-brand-gold text-brand-forest py-5 rounded-2xl font-black uppercase tracking-[0.2em] flex items-center justify-center gap-3"
                 >
-                    Review & Book
+                    Finalize & Book
                     <ChevronRightIcon className="h-5 w-5" />
                 </button>
             </div>
