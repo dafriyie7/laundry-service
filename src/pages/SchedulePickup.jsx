@@ -16,6 +16,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { SparklesIcon, SunIcon, ArrowPathRoundedSquareIcon } from "@heroicons/react/24/solid";
 import AOS from "aos";
+import AlertModal from "../components/AlertModal";
 
 const SchedulePickup = () => {
     const [serviceType, setServiceType] = useState("pickup"); // 'pickup' or 'dropoff'
@@ -30,6 +31,16 @@ const SchedulePickup = () => {
         date: "",
         window: "Morning (08:00 - 12:00)"
     });
+
+    // Modal State
+    const [alertConfig, setAlertConfig] = useState({
+        isOpen: false,
+        title: "",
+        message: "",
+        type: "info"
+    });
+
+    const closeAlert = () => setAlertConfig(prev => ({ ...prev, isOpen: false }));
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -90,41 +101,46 @@ const SchedulePickup = () => {
     const handleFinalizeBooking = () => {
         // Basic validation
         if (!formData.firstName || !formData.phone) {
-            alert("Please provide your name and phone number to continue.");
+            setAlertConfig({
+                isOpen: true,
+                title: "Missing Information",
+                message: "Please provide your First Name and Phone Number to finalize your booking.",
+                type: "warning"
+            });
             return;
         }
 
-        const WHATSAPP_NUMBER = "233559154796"; // Updated Business Number
+        const WHATSAPP_NUMBER = "233556398044"; // Updated Business Number
 
-        let message = `🌿 *New Order: 7Green Laundry*\n`;
-        message += `----------------------------------\n`;
-        message += `👤 *Customer:* ${formData.firstName} ${formData.lastName}\n`;
-        message += `📞 *Phone:* ${formData.phone}\n`;
+        let message = `*NEW ORDER - 7GREEN LAUNDRY*\n`;
+        message += `--------------------------------\n`;
+        message += `*Customer:* ${formData.firstName} ${formData.lastName}\n`;
+        message += `*Phone:* ${formData.phone}\n`;
 
         if (serviceType === "pickup") {
-            message += `📍 *Address:* ${formData.address}\n`;
+            message += `*Address:* ${formData.address}\n`;
         } else {
-            message += `📍 *Type:* Drop-off at Station\n`;
+            message += `*Type:* Drop-off at Station\n`;
         }
 
-        message += `📅 *Service Date:* ${formData.date}\n`;
-        message += `⏰ *Window:* ${formData.window}\n\n`;
+        message += `*Date:* ${formData.date}\n`;
+        message += `*Window:* ${formData.window}\n\n`;
 
-        message += `🧺 *Selections:*\n`;
+        message += `*Order Details:*\n`;
 
         if (basket.length === 0) {
-            message += `• _No items selected (Estimate requested)_\n`;
+            message += `- No items selected (Estimate requested)\n`;
         } else {
             basket.forEach(item => {
                 const categoryClean = item.category.replace(/([A-Z])/g, ' $1');
-                message += `• ${item.quantity}x ${item.item} (${categoryClean}) - GHS ${(item.price * item.quantity).toFixed(2)}\n`;
+                message += `- ${item.quantity}x ${item.item} (${categoryClean}) - GHS ${(item.price * item.quantity).toFixed(2)}\n`;
             });
         }
 
         const finalTotal = (parseFloat(totalEstimate) + (serviceType === "pickup" ? 10 : 0)).toFixed(2);
-        message += `\n💰 *Total Estimate:* GHS ${finalTotal}\n`;
-        message += `🚚 *Service Type:* ${serviceType.charAt(0).toUpperCase() + serviceType.slice(1)}\n`;
-        message += `----------------------------------`;
+        message += `\n*Estimate:* GHS ${finalTotal}\n`;
+        message += `*Service:* ${serviceType.charAt(0).toUpperCase() + serviceType.slice(1)}\n`;
+        message += `--------------------------------`;
 
         const encodedMessage = encodeURIComponent(message);
         window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`, "_blank");
@@ -458,6 +474,14 @@ const SchedulePickup = () => {
                 </button>
             </div>
             <div id="finalize-booking" className="h-1 lg:hidden"></div>
+
+            <AlertModal
+                isOpen={alertConfig.isOpen}
+                onClose={closeAlert}
+                title={alertConfig.title}
+                message={alertConfig.message}
+                type={alertConfig.type}
+            />
         </div>
     );
 };
